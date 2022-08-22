@@ -2,8 +2,10 @@
 <span style="font-weight: lighter">
 The log tailing pattern is a method of tailing the transaction log of the database where events are stored.<br>
 When applications save data in a database, transaction log entries are also saved.<br>
-Then, the transaction log miner reads the transaction log entry and sends it to kafka as a message.<br><br>
-This project uses <a href="https://github.com/debezium/debezium">Debezium</a> as the transaction log miner.
+The transaction log miner reads the transaction log entry above and sends it to kafka as a message.<br>
+Usually, log tailing pattern is recommended to use with RDBMS which supports ACID.<br><br>
+This project uses <a href="https://github.com/debezium/debezium">Debezium</a> as the transaction log miner.<br><br>
+The project simply uses MongoDB as a database,<br> but applying a log tailing pattern to NoSQL that does not support transactions is an <strong>issue</strong> to consider.<br>
 </span>
 <br>
 

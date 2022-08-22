@@ -1,0 +1,22 @@
+server:
+  shutdown: graceful
+
+spring:
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      username: root
+      password: root
+      authentication-database: admin
+      auto-index-creation: true
+      database: order_db
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  data:
+    mongodb:
+      host: mongo

@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  # mongodb does not support transaction log on standalone server.
+  # To use Debezium, mongodb server must be running as a replica set.
+  # in this example, mongodb server will start as a standalone replica set.
+  # as long as you do not rename the replica set, you can change it to another structure like pss.
+  mongo:
+    build:
+      context: .
+      dockerfile: Dockerfile-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - $PWD/script/:/script
+
+  order:
+    image: dove-message-log-tailing/order
+    build: services/order-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - mongo
+
+  ticket:
+    image: dove-message-log-tailing/ticket
+    build: services/ticket-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - mongo

@@ -10,7 +10,7 @@ The project simply uses MongoDB as a database,<br> but applying a log tailing pa
 <br>
 
 ## Structure
-<img src="https://user-images.githubusercontent.com/17774927/186005129-2c28eb54-64ca-4d35-9a14-2c4973f2f3e2.png" alt="structure">
+<img src="https://user-images.githubusercontent.com/17774927/186011929-e277eee5-c6ca-4f90-8580-412a806b73a5.png" alt="structure">
 <br>
 
 ## Event flow

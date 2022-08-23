@@ -13,7 +13,7 @@ In this project, we will treat messages directly from polling service without us
 ## Event flow
 1. Order service receives a http post request (/order) and then creates an order entity and an event entity
 2. Saving an order entity to orders table and an event entity to outbox table. These two insertion operations are grouped together in one transaction.
-3. Ticket service polls events from outbox table every three seconds and polls events that occur above.
+3. Ticket service polls events from outbox table every three seconds and polls events that occur previous steps.
 4. Ticket service takes events and makes operations to its database.
    <br>
 

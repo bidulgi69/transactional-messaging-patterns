@@ -1,0 +1,28 @@
+{
+  "properties": [
+    {
+      "name": "spring.data.mongodb.primary.uri",
+      "type": "java.lang.String",
+      "description": "connection uri of mongoDB server with order database.",
+      "defaultValue": "localhost"
+    },
+    {
+      "name": "spring.data.mongodb.secondary.uri",
+      "type": "java.lang.String",
+      "description": "connection uri of mongoDB server with ticket database.",
+      "defaultValue": "localhost"
+    },
+    {
+      "name": "spring.data.mongodb.primary.database",
+      "type": "java.lang.String",
+      "description": "database name of mongoDB server that order service uses.",
+      "defaultValue": "order_db"
+    },
+    {
+      "name": "spring.data.mongodb.secondary.database",
+      "type": "java.lang.String",
+      "description": "database name of mongoDB server that ticket service uses.",
+      "defaultValue": "ticket_db"
+    }
+  ]
+}

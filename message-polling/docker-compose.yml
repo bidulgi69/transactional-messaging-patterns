@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  order:
+    image: dove-message-polling/order
+    build: services/order-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - mongodb
+
+  ticket:
+    image: dove-message-polling/ticket
+    build: services/ticket-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - mongodb
+
+  mongodb-0:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    hostname: mongodb-0
+    container_name: mongodb-0
+
+  mongodb-1:
+    image: mongo
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    hostname: mongodb-1
+    container_name: mongodb-1

@@ -1,0 +1,28 @@
+server:
+  port: 8081
+  shutdown: graceful
+
+spring:
+  data:
+    mongodb:
+      primary:
+        database: order_db
+        uri: mongodb://root:root@127.0.0.1:27017/order_db?authSource=admin
+      secondary:
+        database: ticket_db
+        uri: mongodb://root:root@127.0.0.1:27018/ticket_db?authSource=admin
+
+logging:
+  level:
+    root: info
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+  data:
+    mongodb:
+      primary.uri: mongodb://root:root@mongodb-0:27017/order_db?authSource=admin
+      secondary.uri: mongodb://root:root@mongodb-1:27017/ticket_db?authSource=admin

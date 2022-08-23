@@ -28,34 +28,33 @@ class MessageRelay(
             OrderOutbox::class.java
         ).flatMap { event ->
             logger.info("Processing event {} and order aggregate is {}", event.type, event.order)
-            when (event.type) {
+            val op = when (event.type) {
                 EventType.ORDER_CREATED -> {
                     ticketService.createTicket(
                         event.order
-                    ).flatMap { ticket ->
-                        Mono.just(
-                            ticket.orderId
-                        )
-                    }
+                    )
                 }
                 EventType.ORDER_REJECTED -> {
                     ticketService.deleteTicket(
                         event.order
-                    ).flatMap { ticket ->
-                        Mono.just(
-                            ticket.orderId
-                        )
-                    }
+                    )
                 }
-                else -> Mono.just(event.order.id)
+                else -> Mono.fromCallable { event.order }
             }
+            Mono.zip(
+                Mono.just(
+                    event.id
+                ),
+                op
+            )
         }
             .collectList()
-            .flatMap { orderIds ->  //  cleanup
-                if (orderIds.isNotEmpty()) {
+            .flatMap { tuples ->  //  cleanup
+                val eventIds = tuples.map { t -> t.t1 }
+                if (eventIds.isNotEmpty()) {
                     primaryMongoTemplate.remove(
                         Query.query(
-                            Criteria.where("key").`in`(orderIds)
+                            Criteria.where("id").`in`(eventIds)
                         ),
                         OrderOutbox::class.java
                     )

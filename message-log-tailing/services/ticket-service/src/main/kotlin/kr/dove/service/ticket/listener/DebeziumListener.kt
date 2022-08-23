@@ -2,6 +2,8 @@ package kr.dove.service.ticket.listener
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import core.event.Event
+import core.event.EventType
+import exceptions.UnsupportedEventTypeException
 import io.debezium.config.Configuration
 import io.debezium.data.Envelope.FieldName
 import io.debezium.data.Envelope.Operation
@@ -46,7 +48,11 @@ class DebeziumListener(
                     }
                 }
                 val event = objectMapper.readValue(get(operation) as String, Event::class.java)
-                ticketService.createTicket(event)
+                when (event.type) {
+                    EventType.ORDER_CREATED -> ticketService.createTicket(event)
+                    EventType.ORDER_REJECTED -> ticketService.deleteTicket(event)
+                    else -> throw UnsupportedEventTypeException("Invalid event type.")
+                }
             }
         } catch (e: RuntimeException) {
             //  throw error

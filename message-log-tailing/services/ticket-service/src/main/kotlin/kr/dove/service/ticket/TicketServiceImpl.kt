@@ -17,45 +17,30 @@ class TicketServiceImpl(
 ) : TicketService {
 
     override fun createTicket(event: Event): Ticket {
-        return when (event.type) {
-            EventType.ORDER_CREATED -> {
-                with(event.order) {
-                    val ticketEntity = ticketRepository.save(
-                        TicketEntity(
-                            id = UUID.randomUUID().toString(),
-                            state = State.PENDING,
-                            orderId = id,
-                            restaurantId = restaurantId,
-                            acceptTime = LocalDateTime.now(),
-                            orderItems = orderItems
-                        )
-                    )
-
-                    ticketEntity.mapToApi()
-                }
-            }
-            else -> {
-                throw UnsupportedEventTypeException("Invalid event type ${event.type}.")
-            }
+        return with(event.order) {
+            val ticketEntity = ticketRepository.save(
+                TicketEntity(
+                    id = UUID.randomUUID().toString(),
+                    state = State.PENDING,
+                    orderId = id,
+                    restaurantId = restaurantId,
+                    acceptTime = LocalDateTime.now(),
+                    orderItems = orderItems
+                )
+            )
+            ticketEntity.mapToApi()
         }
     }
 
     override fun deleteTicket(event: Event) {
-        when (event.type) {
-            EventType.ORDER_REJECTED -> {
-                with(event.order) {
-                    val ticketEntity: TicketEntity? = ticketRepository.findByOrderId(id)
-                    ticketEntity ?. let { en ->
-                        ticketRepository.save(
-                            en.apply {
-                                this.state = State.REJECTED
-                            }
-                        )
+        with(event.order) {
+            val ticketEntity: TicketEntity? = ticketRepository.findByOrderId(id)
+            ticketEntity ?. let { en ->
+                ticketRepository.save(
+                    en.apply {
+                        this.state = State.REJECTED
                     }
-                }
-            }
-            else -> {
-                throw UnsupportedEventTypeException("Invalid event type ${event.type}.")
+                )
             }
         }
     }

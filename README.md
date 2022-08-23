@@ -5,7 +5,7 @@ Simple projects implementing two transactional messaging patterns in microservic
 <br>
 
 ## What is transactional messaging?
-Exchange of events between microservices usually occurs when notifying DB updates from local transactions are delivered to other services. 
+Exchange of events between microservices usually occurs when notifying DB updates from local transactions to other services. 
 When sending events, problems arise if DB updates and event publication are not grouped into one transaction.<br>
 For example, DB updates are successful, but event publication fails, or vice versa.<br>
 If the above two operations are not performed atomically, the service will be very unstable.<br>
